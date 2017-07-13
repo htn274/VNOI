@@ -1,2 +1,2 @@
 # VNOI
-Code VNOI
+Code for solution on VNOI
