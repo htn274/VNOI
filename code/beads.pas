@@ -1,21 +1,19 @@
-uses math;
-const   fi='beas.inp';
-        fo='beas.out';
-var     a,f,last,g:array[0..100001] of longint;
-        n,res,d,kq:longint;
-
+const   fi='beads.inp';
+        fo='beads.out';
+        maxn=trunc(1e5);
+var     a,g,f,last:array[0..maxn+1] of longint;
+        n,max:longint;
         procedure docfile;
-        var     i:longint;
+        var i:longint;
                 begin
-                        assign(input,fi);
-                        reset(input);
+                        assign(input,fi); reset(input);
                         readln(n);
                         for i:= n downto 1 do read(a[i]);
                         close(input);
                 end;
 
-        procedure tang;
-        var     i,j,l,r,mid:longint;
+         procedure tang;
+        var     i,j,l,r,mid,res:longint;
                 begin
                         res:=0;
                         f[0]:=0;
@@ -36,13 +34,12 @@ var     a,f,last,g:array[0..100001] of longint;
                                 end;
                 end;
 
-        procedure giam;
-        var     i,j,l,r,mid:longint;
+         procedure giam;
+        var     i,j,l,r,mid,res:longint;
                 begin
-                        fillchar(last,sizeof(last),0);
                         res:=0;
                         g[0]:=0;
-                        for i:=1 to n do
+                        for i:= 1 to n do
                                 begin
                                         g[i]:=0;
                                         last[i]:=0;
@@ -51,7 +48,7 @@ var     a,f,last,g:array[0..100001] of longint;
                                                 while l<=r do
                                                         begin
                                                                 mid:=(l+r) div 2;
-                                                                if a[i]<a[last[mid]] then l:=mid+1 else r:=mid-1;
+                                                                if a[i]>=a[last[mid]] then r:=mid-1 else l:=mid+1;
                                                         end;
                                                 if res<r+1 then res:=r+1;
                                                 last[r+1]:=i;
@@ -59,21 +56,22 @@ var     a,f,last,g:array[0..100001] of longint;
                                 end;
                 end;
 
-        procedure thuchien;
-        var     i:longint;
+        procedure xuli;
+        var    i:longint;
                 begin
-                        kq:=0;
                         tang;
+                        fillchar(last,sizeof(last),0);
                         giam;
-                        for i:= 1 to n do
-                                kq:=max(kq,abs(f[i]+g[i]-1));
+                        max:=f[1]+g[1];
+                        for i:= 2 to n do
+                                if max<f[i]+g[i] then
+                                        max:=f[i]+g[i];
                 end;
 
 begin
         docfile;
-        thuchien;
-        assign(output,fo);
-        rewrite(output);
-        writeln(kq);
+        xuli;
+        assign(output,fo); rewrite(output);
+        writeln(max-1);
         close(output);
 end.
